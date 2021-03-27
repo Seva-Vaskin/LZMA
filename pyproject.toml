@@ -1,0 +1,17 @@
+[tool.coverage.run]
+source = ["my_lzma"]
+omit = ["my_lzma/__init__.py",
+        "my_lzma/__main__.py",
+        "my_lzma/const.py",
+        "my_lzma/decoder/__init__.py",
+        "my_lzma/decoder/base_decoder.py",
+        "my_lzma/encoder/__init__.py",
+        "my_lzma/encoder/base_encoder.py",
+        "my_lzma/history.py",
+        "my_lzma/input_output.py",
+        "my_lzma/lzma_state.py",
+        "my_lzma/probability.py",
+        "setup.py",
+        "tests/__init__.py",
+        "tests/test_decode.py",
+        "tests/test_encode.py"]
