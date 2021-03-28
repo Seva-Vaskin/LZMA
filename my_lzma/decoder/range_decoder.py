@@ -4,7 +4,7 @@ from my_lzma.probability import Probability
 
 
 class RangeDecoder:
-    """Класс реализующий декодирование диапазона."""
+    """Класс, реализующий декодирование диапазона."""
 
     def __init__(self, in_stream: InputStream):
         self.range = 0xFFFFFFFF
