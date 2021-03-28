@@ -3,7 +3,9 @@ from collections import deque
 
 
 class OutWindow:
-    """Работает с выходным потоком, запоминает последние выведенные size бит."""
+    """Работает с выходным потоком, запоминает
+    последние выведенные size бит.
+    """
 
     def __init__(self, size: int, out_stream: OutputStream):
         self.buf = deque()
@@ -27,7 +29,7 @@ class OutWindow:
 
     def copy_match(self, dist: int, match_length: int) -> None:
         """Копирует строку длины match_length, первый символ которой имеет
-        номер dist в буфере в выходной поток.
+        номер dist в буфере, в выходной поток.
         """
         for i in range(match_length):
             b = self[dist]

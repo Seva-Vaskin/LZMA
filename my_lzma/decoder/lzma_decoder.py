@@ -64,10 +64,10 @@ class LZMADecoder(BaseDecoder):
             dict_size = const.DICT_MIN
         return lc, lp, pb, dict_size
 
-    def pb_context(self):
+    def pb_context(self) -> int:
         return self.out_window.num_decoded & ((1 << self.pb) - 1)
 
-    def decode(self):
+    def decode(self) -> None:
         """Декодирует LZMA."""
         while not self.end_marker and (not self.unpack_size_defined or
                                        self.unpack_size > 0):
@@ -97,14 +97,14 @@ class LZMADecoder(BaseDecoder):
         distance = self.distance_decoder.decode(length)
         return distance == 0xFFFFFFFF and self.range_decoder.is_finished_ok()
 
-    def decode_literal(self):
+    def decode_literal(self) -> None:
         """Декодирует литерал и помещает его в выходной поток."""
         literal = self.literal_decoder.decode(self.state, self.history[0])
         self.out_window.put_byte(bytes([literal]))
         self.unpack_size -= 1
         self.state.update_literal()
 
-    def decode_match(self):
+    def decode_match(self) -> None:
         """Декодирует пару (match, distance), используя simple или rep match.
         """
         if self.range_decoder.decode_bit(self.is_rep[int(self.state)]):
@@ -112,7 +112,7 @@ class LZMADecoder(BaseDecoder):
         else:
             self.decode_simple_match()
 
-    def decode_rep_match(self):
+    def decode_rep_match(self) -> None:
         if self.range_decoder.decode_bit(self.is_rep_123[int(self.state)]):
             # rep match 1/2/3
             if not self.range_decoder.decode_bit(
@@ -141,7 +141,7 @@ class LZMADecoder(BaseDecoder):
         self.out_window.copy_match(distance + 1, length)
         self.state.update_rep()
 
-    def decode_simple_match(self):
+    def decode_simple_match(self) -> None:
         """Декодирует пару (match, distance), используя length и distance
         декодеры, помещает соответствующую подстроку в выходной поток.
         """
@@ -157,7 +157,7 @@ class LZMADecoder(BaseDecoder):
         self.out_window.copy_match(distance + 1, length)
         self.state.update_simple_match()
 
-    def decode_short_rep_match(self):
+    def decode_short_rep_match(self) -> None:
         self.out_window.copy_match(self.history[0] + 1, 1)
         self.unpack_size -= 1
         self.state.update_short_rep()

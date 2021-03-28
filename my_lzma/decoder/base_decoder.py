@@ -13,6 +13,6 @@ class BaseDecoder:
         self.range_decoder = range_decoder
         self.out_window = out_window
 
-    def decode(self, *args):
+    def decode(self, *args) -> None:
         """Данный метод должен быть реализован в наследниках."""
         raise NotImplementedError()

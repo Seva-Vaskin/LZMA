@@ -16,7 +16,7 @@ class RangeDecoder:
         if first_byte != b'\x00' or self.code == self.range:
             self.corrupted = True
 
-    def normalize(self):
+    def normalize(self) -> None:
         """Поддерживает диапазон достаточно большим."""
         if self.range < const.RANGE_BORDER:
             self.range <<= 8
@@ -56,6 +56,6 @@ class RangeDecoder:
 
         return res
 
-    def is_finished_ok(self):
+    def is_finished_ok(self) -> bool:
         """Проверяет корректность завершения потока."""
         return self.code == 0
