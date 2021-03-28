@@ -4,9 +4,9 @@ LZMA decoder test example
 =========================
 ! TEST ! LZMA ! Decoder !
 =========================
----- Test Line 1 --------
+---- Test Line 1 -------- 
 =========================
----- Test Line 2 --------
+---- Test Line 2 -------- 
 =========================
-=== End of test file ====
+=== End of test file ==== 
 =========================
