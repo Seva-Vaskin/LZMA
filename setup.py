@@ -11,7 +11,7 @@ setuptools.setup(
     version="0.1.0",
     author="Diundina Maria",
     author_email="mary.diundina@gmail.com",
-    description="Данное приложение является реализацией архиватора LZMA.",
+    description="Данная программа является реализацией архиватора LZMA.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
