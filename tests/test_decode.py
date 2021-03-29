@@ -52,7 +52,7 @@ def test_bad_corrupted():
     try:
         decoder = LZMADecoder(in_file, out_file)
         decoder.decode()
-    except:
+    except BaseException:
         return
     assert False
 
@@ -63,7 +63,7 @@ def test_bad_eos_incorrect_size():
     try:
         decoder = LZMADecoder(in_file, out_file)
         decoder.decode()
-    except:
+    except BaseException:
         return
     assert False
 
@@ -74,6 +74,6 @@ def test_bad_incorrect_size():
     try:
         decoder = LZMADecoder(in_file, out_file)
         decoder.decode()
-    except:
+    except BaseException:
         return
     assert False

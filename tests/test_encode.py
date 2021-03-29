@@ -56,7 +56,7 @@ def test_incorrect_lc():
     try:
         encoder = LZMAEncoder(in_file, out_file, -1, 0, 2, 1024)
         encoder.encode()
-    except:
+    except BaseException:
         return
     assert False
 
@@ -67,7 +67,7 @@ def test_incorrect_lp():
     try:
         encoder = LZMAEncoder(in_file, out_file, 3, -1, 2, 1024)
         encoder.encode()
-    except:
+    except BaseException:
         return
     assert False
 
@@ -78,7 +78,7 @@ def test_incorrect_pb():
     try:
         encoder = LZMAEncoder(in_file, out_file, 3, 0, -1, 1024)
         encoder.encode()
-    except:
+    except BaseException:
         return
     assert False
 
@@ -89,6 +89,6 @@ def test_incorrect_dict_size():
     try:
         encoder = LZMAEncoder(in_file, out_file, 3, 0, 2, -1)
         encoder.encode()
-    except:
+    except BaseException:
         return
     assert False
