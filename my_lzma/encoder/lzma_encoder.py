@@ -53,7 +53,8 @@ class LZMAEncoder(BaseEncoder):
             raise Exception("Неверный параметр pb")
         if not (0 <= self.dict_size <= 0xFFFFFFFF):
             raise Exception("Неверный размер словаря")
-        self.output_stream.write(bytes([(self.pb * 5 + self.lp) * 9 + self.lc]))
+        self.output_stream.write(
+            bytes([(self.pb * 5 + self.lp) * 9 + self.lc]))
         self.output_stream.write(self.dict_size.to_bytes(4, 'little'))
         self.output_stream.write(self.file_size.to_bytes(8, 'little'))
 

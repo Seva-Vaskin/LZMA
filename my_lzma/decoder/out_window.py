@@ -34,4 +34,3 @@ class OutWindow:
         for i in range(match_length):
             b = self[dist]
             self.put_byte(b)
-
