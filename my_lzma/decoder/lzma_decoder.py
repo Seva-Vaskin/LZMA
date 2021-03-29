@@ -65,6 +65,7 @@ class LZMADecoder(BaseDecoder):
         return lc, lp, pb, dict_size
 
     def pb_context(self) -> int:
+        """Возвращает контекст pb."""
         return self.out_window.num_decoded & ((1 << self.pb) - 1)
 
     def decode(self) -> None:
