@@ -175,3 +175,6 @@ class LZMAEncoder(BaseEncoder):
             self.is_rep_0[int(self.state)][self.pb_context()], 0)
         self.in_window.move_window()
         self.state.update_short_rep()
+
+    def get_compression_rate(self) -> float:
+        return self.in_window.in_stream.processed / self.range_encoder.out_stream.processed

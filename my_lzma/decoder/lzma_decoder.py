@@ -11,6 +11,7 @@ from my_lzma.input_output import InputStream, OutputStream
 from my_lzma import const
 from my_lzma.lzma_state import LZMAState
 from my_lzma.history import History
+import sys
 
 
 class LZMADecoder(BaseDecoder):
@@ -53,13 +54,13 @@ class LZMADecoder(BaseDecoder):
         """Декодирует свойства LZMA декодера."""
         contexts = properties[0]
         if contexts >= 9 * 5 * 5:
-            raise Exception("Неверные параметры LZMA")
+            raise ArchiveError
         lc = contexts % 9
         contexts //= 9
         lp = contexts % 5
         contexts //= 5
         pb = contexts
-        dict_size = int.from_bytes(properties[1:5:], byteorder='little')
+        dict_size = int.from_bytes(properties[1:5], byteorder='little')
         if dict_size < const.DICT_MIN:
             dict_size = const.DICT_MIN
         return lc, lp, pb, dict_size
@@ -78,10 +79,12 @@ class LZMADecoder(BaseDecoder):
             else:
                 self.decode_literal()
         if self.unpack_size_defined and self.unpack_size != 0:
-            raise Exception("LZMA error")
+            raise ArchiveError
+        # code == 0 ?
         if not self.range_decoder.is_finished_ok() and not \
                 self.check_end_marker_in_input_stream():
-            raise Exception("LZMA error")
+            raise ArchiveError
+        # code == 0 !
 
     def check_end_marker_in_input_stream(self) -> bool:
         """Проверяет наличие флага завершения во входном потоке."""
@@ -138,8 +141,8 @@ class LZMADecoder(BaseDecoder):
         length = self.rep_length_decoder.decode(self.pb_context())
         self.unpack_size -= length
         if self.unpack_size_defined and self.unpack_size < 0:
-            raise Exception("LZMA error")
-        self.out_window.copy_match(distance + 1, length)
+            raise ArchiveError
+        self.try_copy_match(distance, length)
         self.state.update_rep()
 
     def decode_simple_match(self) -> None:
@@ -153,12 +156,25 @@ class LZMADecoder(BaseDecoder):
             return
         self.unpack_size -= length
         if self.unpack_size_defined and self.unpack_size < 0:
-            raise Exception("LZMA error")
+            raise ArchiveError
         self.history.add(distance)
-        self.out_window.copy_match(distance + 1, length)
+        self.try_copy_match(distance, length)
         self.state.update_simple_match()
 
     def decode_short_rep_match(self) -> None:
-        self.out_window.copy_match(self.history[0] + 1, 1)
+        self.try_copy_match(self.history[0], 1)
         self.unpack_size -= 1
         self.state.update_short_rep()
+
+    def try_copy_match(self, distance: int, length: int) -> None:
+        """Пытается скопировать строку длины length, первый символ которой имеет
+        номер distance в буфере, в выходной поток. В случае неудачи выдаёт ошибку.
+        """
+        try:
+            self.out_window.copy_match(distance + 1, length)
+        except IndexError:
+            raise ArchiveError
+
+
+class ArchiveError(Exception):
+    pass
