@@ -7,6 +7,12 @@ import argparse
 import sys
 
 ARCHIVE_ERROR = 1
+ARCHIVER_MODE_ERROR = 2
+INPUT_PATH_ERROR = 3
+ARCHIVE_EXTENSION_ERROR = 4
+OUTPUT_PATH_ERROR = 5
+USER_INTERRUPT_ERROR = 6
+PARAMETERS_ERROR = 7
 ARCHIVE_EXTENSION = '.lzma'
 
 
@@ -45,17 +51,17 @@ if __name__ == "__main__":
     args = parse_args()
     if not args.encode ^ args.decode:
         print("Неверно выбран режим работы архиватора", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(ARCHIVER_MODE_ERROR)
     if args.input is None:
         print("Путь до входного файла не указан", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(INPUT_PATH_ERROR)
     in_path = Path(args.input)
     if not in_path.is_file():
         print("Указнный путь не является путём до файла", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(INPUT_PATH_ERROR)
     if args.decode and not args.input.endswith(ARCHIVE_EXTENSION):
         print("Исходный файл не является архивом", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(ARCHIVE_EXTENSION_ERROR)
     if args.encode and args.output is None:
         args.output = args.input + ARCHIVE_EXTENSION
     if args.encode and not args.output.endswith(ARCHIVE_EXTENSION):
@@ -66,15 +72,16 @@ if __name__ == "__main__":
     out_path = Path(args.output)
     if out_path.exists() and not out_path.is_file():
         print("Неверный путь до выходного файла", file=sys.stderr)
-        sys.exit(0)
+        sys.exit(OUTPUT_PATH_ERROR)
     if out_path.is_file():
-        ans = input('Файл с именем "%s" уже существует, хотите его перезаписать? (y/n): ' % args.output)
+        ans = input('Файл с именем "%s" уже существует, хотите его '
+                    'перезаписать? (y/n): ' % args.output)
         if ans.lower() != 'y':
-            sys.exit(0)
+            sys.exit(USER_INTERRUPT_ERROR)
     if not 0 <= args.size <= 0xFFFFFFFF:
         print("Размер словаря должен быть целым беззнаковым 32 битным числом.",
               file=sys.stderr)
-        sys.exit(0)
+        sys.exit(PARAMETERS_ERROR)
 
     if args.decode:
         try:
