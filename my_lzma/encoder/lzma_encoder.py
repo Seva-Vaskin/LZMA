@@ -177,4 +177,6 @@ class LZMAEncoder(BaseEncoder):
         self.state.update_short_rep()
 
     def get_compression_rate(self) -> float:
-        return self.in_window.in_stream.processed / self.range_encoder.out_stream.processed
+        """Считает коэффициент сжатия."""
+        return self.in_window.in_stream.processed / \
+            self.range_encoder.out_stream.processed

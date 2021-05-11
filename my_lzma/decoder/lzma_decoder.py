@@ -11,7 +11,6 @@ from my_lzma.input_output import InputStream, OutputStream
 from my_lzma import const
 from my_lzma.lzma_state import LZMAState
 from my_lzma.history import History
-import sys
 
 
 class LZMADecoder(BaseDecoder):
@@ -167,8 +166,9 @@ class LZMADecoder(BaseDecoder):
         self.state.update_short_rep()
 
     def try_copy_match(self, distance: int, length: int) -> None:
-        """Пытается скопировать строку длины length, первый символ которой имеет
-        номер distance в буфере, в выходной поток. В случае неудачи выдаёт ошибку.
+        """Пытается скопировать строку длины length, первый символ которой
+        имеет номер distance в буфере, в выходной поток.
+        В случае неудачи выдаёт ошибку.
         """
         try:
             self.out_window.copy_match(distance + 1, length)
