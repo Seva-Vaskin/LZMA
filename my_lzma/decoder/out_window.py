@@ -4,7 +4,7 @@ from collections import deque
 
 class OutWindow:
     """Работает с выходным потоком, запоминает
-    последние выведенные size бит.
+    последние выведенные size байт.
     """
 
     def __init__(self, size: int, out_stream: OutputStream):
